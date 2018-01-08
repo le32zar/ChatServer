@@ -246,8 +246,8 @@ public class Server
         if(roomName.equals("Default") || !_roomMap.containsKey(roomName)) return false;
         
         Map<String, ClientThread> room = _roomMap.get(roomName);
-        for(ClientThread client : room) {
-            
+        for(ClientThread client : room.values()) {
+            changeRoom(client.ClientName, "Default");
         }
         
         Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_REMOVED", roomName);
@@ -263,13 +263,16 @@ public class Server
         ClientThread client = _clientMap.get(clientName);
         
         if(!_roomMap.containsKey(newRoom) || client.RoomName.equals(newRoom)) {
-            Message msg = new Message(MessageType.INTERNAL, "server", clientName, "ROOM_CHANGED", "false");
+            Message msg = new Message(MessageType.INTERNAL, "server", client.ClientName, "ROOM_CHANGED", "false");
             client.sendMessage(msg);
             return;
         }
              
         _roomMap.get(client.RoomName).remove(client.ClientName);
+        _roomMap.get(newRoom).put(client.ClientName, client);    
         
+        Message msg = new Message(MessageType.INTERNAL, "server", clientName, "ROOM_CHANGED", "true", "Default");
+        client.sendMessage(msg);
     }
     
     public int getPort() 
