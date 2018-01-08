@@ -1,0 +1,5 @@
+[23-36]  Created ServerSocket at 0.0.0.0 on port 1501
+[23-36]  Room "Hugo" was added.
+[23-36]  Room "Unsere Zockerecke" was added.
+[23-37]  Stopping Server...
+[23-37]  Server was stopped.

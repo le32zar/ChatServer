@@ -5,9 +5,11 @@
  */
 package ChatServer;
 
+import ChatServer.Dialogs.*;
 import java.text.*;
 import java.util.Date;
 import java.io.*;
+import java.util.*;
 import javax.swing.*;
 
 /**
@@ -18,9 +20,16 @@ public class ServerForm extends javax.swing.JFrame {
 
     private Server serverInstance;
     private PrintWriter logWriter;
+    private DefaultListModel userListModel;
+    private DefaultListModel roomListModel;
     
     public ServerForm() {
+        // Initialize Swing Components
+        userListModel = new DefaultListModel();
+        roomListModel = new DefaultListModel();
         initComponents();
+                
+        // Finished
         
         try {
             String logFile = String.format("Log_ChatServer_%s_%s.txt", getDate(), getTime(true));
@@ -29,7 +38,7 @@ public class ServerForm extends javax.swing.JFrame {
             logString("Error while trying to create Log file: " + ex.getMessage());
         }
         
-        serverInstance = new Server(1501, "ChatServer", this);
+        serverInstance = new Server(1501, "ChatServer", this);       
         
     }
     
@@ -61,10 +70,24 @@ public class ServerForm extends javax.swing.JFrame {
         logWriter.print(logText);
     }
     
-    public void updateStatus(ServerStatus status) {
+    public void setStatus(ServerStatus status) {
         lblServerStatus.setText("Serverstatus: " + status.name());
     }
-
+    
+    public void updateUserAndRooms(Map<String, String[]> roomUserMap) {
+        userListModel.clear();
+        roomListModel.clear();
+        
+        roomUserMap.keySet().forEach((roomName) -> {
+            String[] userNames = roomUserMap.get(roomName);
+            roomListModel.addElement(String.format("%s (%d User)", roomName, userNames.length));
+            
+            for(String userName : userNames) {
+                userListModel.addElement(String.format("[%s] %s", roomName, userName));
+            }
+        });
+    }
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -77,21 +100,25 @@ public class ServerForm extends javax.swing.JFrame {
         panelLog = new javax.swing.JPanel();
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaLog = new javax.swing.JTextArea();
-        lblServerLog = new javax.swing.JLabel();
         lblServerStatus = new javax.swing.JLabel();
         panelStatus = new javax.swing.JPanel();
-        lblStatus = new javax.swing.JLabel();
-        tabbedPane1Status = new javax.swing.JTabbedPane();
+        tabbedPanelStatus = new javax.swing.JTabbedPane();
+        jScrollPane2 = new javax.swing.JScrollPane();
+        listUsers = new javax.swing.JList<>();
+        jScrollPane3 = new javax.swing.JScrollPane();
+        listRooms = new javax.swing.JList<>();
         menuMain = new javax.swing.JMenuBar();
         buttonServer = new javax.swing.JMenu();
         subButtonStart = new javax.swing.JMenuItem();
         subButtonStop = new javax.swing.JMenuItem();
         buttonUser = new javax.swing.JMenu();
+        buttonRoom = new javax.swing.JMenu();
+        subButtonRoomAdd = new javax.swing.JMenuItem();
+        buttonOptions = new javax.swing.JMenu();
         subButtonShowAccounts = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatServer 0.1");
-        setPreferredSize(new java.awt.Dimension(950, 600));
         setSize(new java.awt.Dimension(950, 600));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {
@@ -99,15 +126,12 @@ public class ServerForm extends javax.swing.JFrame {
             }
         });
 
-        panelLog.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelLog.setBorder(javax.swing.BorderFactory.createTitledBorder("Serverlog"));
 
         textAreaLog.setEditable(false);
         textAreaLog.setColumns(20);
         textAreaLog.setRows(5);
         jScrollPane1.setViewportView(textAreaLog);
-
-        lblServerLog.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
-        lblServerLog.setText("ServerLog:");
 
         lblServerStatus.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
         lblServerStatus.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
@@ -122,27 +146,32 @@ public class ServerForm extends javax.swing.JFrame {
                 .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
                     .addGroup(panelLogLayout.createSequentialGroup()
-                        .addGap(1, 1, 1)
-                        .addComponent(lblServerLog)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(lblServerStatus)))
+                        .addComponent(lblServerStatus)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         panelLogLayout.setVerticalGroup(
             panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
-                .addGap(6, 6, 6)
-                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(lblServerLog, javax.swing.GroupLayout.PREFERRED_SIZE, 18, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lblServerStatus))
+                .addComponent(lblServerStatus)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 548, Short.MAX_VALUE)
+                .addComponent(jScrollPane1)
                 .addContainerGap())
         );
 
-        panelStatus.setBorder(javax.swing.BorderFactory.createEtchedBorder());
+        panelStatus.setBorder(javax.swing.BorderFactory.createTitledBorder("Status"));
 
-        lblStatus.setText("Status:");
+        listUsers.setModel(userListModel);
+        listUsers.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane2.setViewportView(listUsers);
+
+        tabbedPanelStatus.addTab("Users", jScrollPane2);
+
+        listRooms.setModel(roomListModel);
+        listRooms.setSelectionMode(javax.swing.ListSelectionModel.SINGLE_SELECTION);
+        jScrollPane3.setViewportView(listRooms);
+
+        tabbedPanelStatus.addTab("Rooms", jScrollPane3);
 
         javax.swing.GroupLayout panelStatusLayout = new javax.swing.GroupLayout(panelStatus);
         panelStatus.setLayout(panelStatusLayout);
@@ -150,20 +179,13 @@ public class ServerForm extends javax.swing.JFrame {
             panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelStatusLayout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(tabbedPane1Status)
-                    .addGroup(panelStatusLayout.createSequentialGroup()
-                        .addComponent(lblStatus)
-                        .addGap(0, 402, Short.MAX_VALUE)))
+                .addComponent(tabbedPanelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 446, Short.MAX_VALUE)
                 .addContainerGap())
         );
         panelStatusLayout.setVerticalGroup(
             panelStatusLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(panelStatusLayout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lblStatus)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tabbedPane1Status, javax.swing.GroupLayout.DEFAULT_SIZE, 275, Short.MAX_VALUE)
+                .addComponent(tabbedPanelStatus, javax.swing.GroupLayout.DEFAULT_SIZE, 269, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -188,6 +210,21 @@ public class ServerForm extends javax.swing.JFrame {
         menuMain.add(buttonServer);
 
         buttonUser.setText("User");
+        menuMain.add(buttonUser);
+
+        buttonRoom.setText("Room");
+
+        subButtonRoomAdd.setText("Add");
+        subButtonRoomAdd.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subButtonRoomAddActionPerformed(evt);
+            }
+        });
+        buttonRoom.add(subButtonRoomAdd);
+
+        menuMain.add(buttonRoom);
+
+        buttonOptions.setText("Options");
 
         subButtonShowAccounts.setText("Show Accounts...");
         subButtonShowAccounts.addActionListener(new java.awt.event.ActionListener() {
@@ -195,9 +232,9 @@ public class ServerForm extends javax.swing.JFrame {
                 subButtonShowAccountsActionPerformed(evt);
             }
         });
-        buttonUser.add(subButtonShowAccounts);
+        buttonOptions.add(subButtonShowAccounts);
 
-        menuMain.add(buttonUser);
+        menuMain.add(buttonOptions);
 
         setJMenuBar(menuMain);
 
@@ -219,7 +256,7 @@ public class ServerForm extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(panelStatus, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE))
+                        .addGap(0, 254, Short.MAX_VALUE))
                     .addComponent(panelLog, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -261,6 +298,20 @@ public class ServerForm extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(null,tempArea,title, JOptionPane.PLAIN_MESSAGE);
     }//GEN-LAST:event_subButtonShowAccountsActionPerformed
 
+    private void subButtonRoomAddActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonRoomAddActionPerformed
+        AddRoomDialog dialog = new AddRoomDialog(this, true);
+        dialog.setVisible(true);
+        if(dialog.Canceled) return;
+        
+        while(serverInstance.roomExists(dialog.RoomName)) {
+            JOptionPane.showMessageDialog(null,"The given room already exists.","Room already exists", JOptionPane.ERROR);
+            dialog.setVisible(true);
+            if(dialog.Canceled) return;
+        }
+        
+        serverInstance.addRoom(dialog.RoomName);
+    }//GEN-LAST:event_subButtonRoomAddActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -298,19 +349,24 @@ public class ServerForm extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu buttonOptions;
+    private javax.swing.JMenu buttonRoom;
     private javax.swing.JMenu buttonServer;
     private javax.swing.JMenu buttonUser;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JLabel lblServerLog;
+    private javax.swing.JScrollPane jScrollPane2;
+    private javax.swing.JScrollPane jScrollPane3;
     private javax.swing.JLabel lblServerStatus;
-    private javax.swing.JLabel lblStatus;
+    private javax.swing.JList<String> listRooms;
+    private javax.swing.JList<String> listUsers;
     private javax.swing.JMenuBar menuMain;
     private javax.swing.JPanel panelLog;
     private javax.swing.JPanel panelStatus;
+    private javax.swing.JMenuItem subButtonRoomAdd;
     private javax.swing.JMenuItem subButtonShowAccounts;
     private javax.swing.JMenuItem subButtonStart;
     private javax.swing.JMenuItem subButtonStop;
-    private javax.swing.JTabbedPane tabbedPane1Status;
+    private javax.swing.JTabbedPane tabbedPanelStatus;
     private javax.swing.JTextArea textAreaLog;
     // End of variables declaration//GEN-END:variables
 }

@@ -1,0 +1,29 @@
+[22-14]  Created ServerSocket at 0.0.0.0 on port 1501
+[22-15]  Client tries to connect...
+[22-15]  <-- newClient [LOGIN_ATTEMPT: niklas]
+[22-15]  Client registered new account with given credentials.
+[22-15]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[22-15]  Client niklas succesfully connected.
+[22-16]  Client tries to connect...
+[22-16]  <-- newClient [LOGIN_ATTEMPT: harald]
+[22-16]  Client registered new account with given credentials.
+[22-16]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[22-16]  Client harald succesfully connected.
+[22-16]  harald --> Default [ROOM: wernigeroder]
+[22-16]  Default --> niklas [ROOM: wernigeroder]
+[22-16]  niklas --> Default [ROOM: weissbier]
+[22-16]  Default --> harald [ROOM: weissbier]
+[22-16]  Client niklas disconnected.
+[22-17]  Client harald disconnected.
+[22-17]  Client tries to connect...
+[22-17]  <-- newClient [LOGIN_ATTEMPT: niklas]
+[22-17]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[22-17]  Client niklas succesfully connected.
+[22-17]  Client tries to connect...
+[22-17]  <-- newClient [LOGIN_ATTEMPT: harald]
+[22-17]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[22-17]  Client harald succesfully connected.
+[22-17]  Stopping Server...
+[22-17]  Exception while trying to close server: invalid handle value: 007DFFFF
+[22-18]  Stopping Server...
+[22-18]  Exception while trying to close server: Software caused connection abort: socket write error

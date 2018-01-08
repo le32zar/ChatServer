@@ -3,7 +3,6 @@ package ChatServer;
 import java.io.*;
 import java.net.*;
 import java.util.*;
-import java.util.concurrent.*;
 
 public class Server
 {
@@ -32,7 +31,8 @@ public class Server
         Accounts = new AccountManager(ACCOUNT_PATH);
     }
     
-    public void init() {        
+    public void init() {   
+        // Add Default room
         _roomMap.put("Default", new HashMap<>());
         
         try {
@@ -44,6 +44,8 @@ public class Server
             log("Error while creating ServerSocket: " + ex.getMessage());
             setStatus(ServerStatus.Error);
         }
+        
+        updateForm();
     }
 
     public void start() 
@@ -76,6 +78,7 @@ public class Server
             
             _socket.close();
             setStatus(ServerStatus.Stopped);
+            updateForm();
             log("Server was stopped.");
         } catch (IOException | ClassNotFoundException ex) {
             log("Exception while trying to close server: " + ex.getMessage());
@@ -136,27 +139,48 @@ public class Server
         _clientMap.put(name, thread);
         _roomMap.get("Default").put(name, thread);
         thread.start();
+        
+        Message msg = new Message(MessageType.INTERNAL, "server", null, "USER_CONNECTED", name);
+        forwardPublic(msg, name);
                 
+        updateForm();
         log("Client " + name + " succesfully connected.");
     }
-        
+    
     public synchronized void logoutClient(String clientName, String roomName) {
         if(!_clientMap.containsKey(clientName)) return;
         _clientMap.remove(clientName);
+        _roomMap.get(roomName).remove(clientName);    
         
-        _roomMap.get(roomName).remove(clientName);
+        Message msg = new Message(MessageType.INTERNAL, "server", null, "USER_DISCONNECTED", clientName, roomName);
+        forwardPublic(msg, null);
+        
+        updateForm();
         log("Client " + clientName + " disconnected.");
     }    
         
-    public synchronized void forwardPrivate(Message msg) throws IOException {
+    public synchronized void forwardPrivate(Message msg) {
         ClientThread client = _clientMap.get(msg.Receiver);
         client.sendMessage(msg);
     }
     
     /**
+     * Forwards the given Message to all Clients on the Server.
+     * @param msg
+     * @throws IOException 
+     */
+    public synchronized void forwardPublic(Message msg, String except) {
+        for(ClientThread client : _clientMap.values()) {
+            if(except != null && client.ClientName.equals(except)) continue;
+            msg.Receiver = client.ClientName;
+            client.sendMessage(msg);
+        }
+    }
+    
+    /**
     Forwards the given Message to all Clients in the Room addressed by Receiver except the Sender.
     **/
-    public synchronized void forwardRoom(Message msg) throws IOException {
+    public synchronized void forwardRoom(Message msg) {
         String clientSender = msg.Sender;
         msg.Sender = msg.Receiver;
         
@@ -196,6 +220,15 @@ public class Server
     }
     
     /**
+     * Returns if a room with the given name exists.
+     * @param roomName
+     * @return True if the room exists.
+     */
+    public synchronized boolean roomExists(String roomName) {
+        return _roomMap.containsKey(roomName);
+    }
+    
+    /**
      * Renames the room roomName to newName. 
      * @param roomName
      * @param newName
@@ -208,13 +241,11 @@ public class Server
         _roomMap.remove(roomName);
         _roomMap.put(newName, room);
         
-        Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_RENAMED", newName);
-        
-        for(ClientThread client : room.values())  {
-            msg.Receiver = client.ClientName;
-            client.sendMessage(msg);
-        }
-        
+        Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_RENAMEND", roomName, newName);
+        forwardPublic(msg, null);
+                        
+        updateForm();
+        log(String.format("Room \"%s\" was renamed to \"\".", roomName, newName));
         return true;
     }
     
@@ -229,11 +260,10 @@ public class Server
         _roomMap.put(roomName, new HashMap<>());
         
         Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_ADDED", roomName);
-        for(ClientThread client : _clientMap.values()) {
-            msg.Receiver = client.ClientName;
-            client.sendMessage(msg);
-        }
-        
+        forwardPublic(msg, null);
+                        
+        updateForm();
+        log(String.format("Room \"%s\" was added.", roomName));
         return true;
     }
     
@@ -246,33 +276,43 @@ public class Server
         if(roomName.equals("Default") || !_roomMap.containsKey(roomName)) return false;
         
         Map<String, ClientThread> room = _roomMap.get(roomName);
-        for(ClientThread client : room.values()) {
-            changeRoom(client.ClientName, "Default");
+        for(String clientName : room.keySet()) {
+            changeRoom(clientName, "Default");
         }
         
         Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_REMOVED", roomName);
-        for(ClientThread client : _clientMap.values()) {
-            msg.Receiver = client.ClientName;
-            client.sendMessage(msg);
-        }
-        
+        forwardPublic(msg, null);
+                        
+        updateForm();
+        log(String.format("Room \"%s\" was removed. All users moved to room \"Default\".", roomName));
         return true;
     }
     
     public synchronized void changeRoom(String clientName, String newRoom) {
-        ClientThread client = _clientMap.get(clientName);
+        ClientThread client = _clientMap.get(clientName);        
+        String oldRoom = client.RoomName;
         
-        if(!_roomMap.containsKey(newRoom) || client.RoomName.equals(newRoom)) {
-            Message msg = new Message(MessageType.INTERNAL, "server", client.ClientName, "ROOM_CHANGED", "false");
+        if(!_roomMap.containsKey(newRoom) || oldRoom.equals(newRoom)) {
+            // Inform Client that room change wasn't successful 
+            Message msg = new Message(MessageType.INTERNAL, "server", client.ClientName, "REPLY_ROOM_CHANGE", "false", oldRoom, oldRoom);
             client.sendMessage(msg);
             return;
         }
              
-        _roomMap.get(client.RoomName).remove(client.ClientName);
-        _roomMap.get(newRoom).put(client.ClientName, client);    
+        _roomMap.get(oldRoom).remove(client.ClientName);
+        _roomMap.get(newRoom).put(client.ClientName, client);
+        client.RoomName = newRoom;
         
-        Message msg = new Message(MessageType.INTERNAL, "server", clientName, "ROOM_CHANGED", "true", "Default");
-        client.sendMessage(msg);
+        // Inform client about successful room change
+        Message msgReply = new Message(MessageType.INTERNAL, "server", clientName, "REPLY_ROOM_CHANGE", "true", oldRoom, newRoom);
+        client.sendMessage(msgReply);
+        
+        // Inform other clients about room change
+        Message msgInfo = new Message(MessageType.INTERNAL, "server", null, "CLIENT_ROOM_CHANGED", clientName, oldRoom, newRoom);
+        forwardPublic(msgInfo, clientName);
+        
+        updateForm();
+        log(String.format("Client \"%s\" moved from room \"%s\" to \"%s\".", clientName, oldRoom, newRoom));
     }
     
     public int getPort() 
@@ -284,10 +324,22 @@ public class Server
     {
         return _socket.getInetAddress().getHostAddress();
     }
-    
+        
     public final void setStatus(ServerStatus status) {
         Status = status;
-        _form.updateStatus(status);
+        _form.setStatus(status);
+    }
+    
+    private void updateForm() {
+        HashMap<String, String[]> roomUserMap = new HashMap<>();
+        
+        _roomMap.forEach( (roomName, clientMap) ->  {
+            Set<String> userSet = clientMap.keySet();
+            String[] userNames = userSet.toArray(new String[userSet.size()]);
+            roomUserMap.put(roomName, userNames);
+        });
+        
+        _form.updateUserAndRooms(roomUserMap);
     }
     
     public void log(Object o) {

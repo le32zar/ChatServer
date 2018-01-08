@@ -1,0 +1,8 @@
+[00-19]  Created ServerSocket at 0.0.0.0 on port 1501
+[00-19]  Client tries to connect...
+[00-19]  <-- newClient [LOGIN_ATTEMPT: niklas]
+[00-19]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-19]  Client niklas succesfully connected.
+[00-19]  Room "Harald Schmidt Show" was added.
+[00-21]  Stopping Server...
+[00-21]  Exception while trying to close server: invalid handle value: 7E000070

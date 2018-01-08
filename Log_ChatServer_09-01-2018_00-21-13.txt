@@ -1,0 +1,19 @@
+[00-21]  Created ServerSocket at 0.0.0.0 on port 1501
+[00-21]  Client tries to connect...
+[00-21]  <-- newClient [LOGIN_ATTEMPT: niklas]
+[00-21]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-21]  Client niklas succesfully connected.
+[00-21]  Client tries to connect...
+[00-21]  <-- newClient [LOGIN_ATTEMPT: harald]
+[00-21]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-21]  --> niklas [INTERNAL: USER_CONNECTED]
+[00-21]  Client harald succesfully connected.
+[00-22]  --> niklas [INTERNAL: ROOM_ADDED]
+[00-22]  --> harald [INTERNAL: ROOM_ADDED]
+[00-22]  Room "Harald Schmidt Show" was added.
+[00-22]  harald --> Default [ROOM: asdf]
+[00-22]  Default --> niklas [ROOM: asdf]
+[00-22]  --> niklas [INTERNAL: USER_DISCONNECTED]
+[00-22]  Client harald disconnected.
+[00-22]  Stopping Server...
+[00-22]  Server was stopped.
