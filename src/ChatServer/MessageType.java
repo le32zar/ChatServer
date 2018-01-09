@@ -5,6 +5,6 @@ public enum MessageType {
     ROOM,
     INTERNAL,
     RECEIVED,
-    LOGIN_ATTEMPT,
+    LOGIN_REQUEST,
     LOGIN_REPLY
 }

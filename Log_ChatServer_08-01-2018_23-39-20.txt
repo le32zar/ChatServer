@@ -1,7 +1,0 @@
-[23-39]  Room "fgh" was added.
-[23-39]  Created ServerSocket at 0.0.0.0 on port 1501
-[23-39]  Stopping Server...
-[23-39]  Server was stopped.
-[23-39]  Created ServerSocket at 0.0.0.0 on port 1501
-[23-40]  Stopping Server...
-[23-40]  Server was stopped.

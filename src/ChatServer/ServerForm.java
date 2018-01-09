@@ -28,7 +28,8 @@ public class ServerForm extends javax.swing.JFrame {
         userListModel = new DefaultListModel();
         roomListModel = new DefaultListModel();
         initComponents();
-                
+        
+        updateRunningComponents(false);
         // Finished
         
         try {
@@ -70,7 +71,11 @@ public class ServerForm extends javax.swing.JFrame {
         logWriter.print(logText);
     }
     
-    public void setStatus(ServerStatus status) {
+    public void showMessage(String title, String text, int jOpenPane) {
+        JOptionPane.showMessageDialog(null,text,title, jOpenPane);
+    }
+    
+    public void updateStatus(ServerStatus status) {
         lblServerStatus.setText("Serverstatus: " + status.name());
     }
     
@@ -86,6 +91,19 @@ public class ServerForm extends javax.swing.JFrame {
                 userListModel.addElement(String.format("[%s] %s", roomName, userName));
             }
         });
+    }
+    
+    public final void updateRunningComponents(boolean enabled)  {        
+        buttonUser.setEnabled(enabled);
+        buttonRoom.setEnabled(enabled);
+    }
+    
+    private String getRoomFromList(int index) {
+        return listRooms.getSelectedValuesList().get(index).split(" \\([0-9]* User\\)$")[0];
+    }
+    
+    private String getUserFromList(int index) {
+        return listUsers.getSelectedValuesList().get(index).split("^\\[.*\\] ")[0];
     }
     
     /**
@@ -114,6 +132,7 @@ public class ServerForm extends javax.swing.JFrame {
         buttonUser = new javax.swing.JMenu();
         buttonRoom = new javax.swing.JMenu();
         subButtonRoomAdd = new javax.swing.JMenuItem();
+        subButtonRoomRename = new javax.swing.JMenuItem();
         buttonOptions = new javax.swing.JMenu();
         subButtonShowAccounts = new javax.swing.JMenuItem();
 
@@ -222,6 +241,14 @@ public class ServerForm extends javax.swing.JFrame {
         });
         buttonRoom.add(subButtonRoomAdd);
 
+        subButtonRoomRename.setText("Rename");
+        subButtonRoomRename.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subButtonRoomRenameActionPerformed(evt);
+            }
+        });
+        buttonRoom.add(subButtonRoomRename);
+
         menuMain.add(buttonRoom);
 
         buttonOptions.setText("Options");
@@ -275,12 +302,16 @@ public class ServerForm extends javax.swing.JFrame {
             serverInstance.start();            
         };
         new Thread(serverRun).start();
+        
+        updateRunningComponents(true);
     }//GEN-LAST:event_subButtonStartActionPerformed
 
     private void subButtonStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonStopActionPerformed
         if(serverInstance.Status != ServerStatus.Default && serverInstance.Status != ServerStatus.Stopped) {
             serverInstance.stop();
         }
+        
+        updateRunningComponents(false);
     }//GEN-LAST:event_subButtonStopActionPerformed
 
     private void formWindowClosing(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowClosing
@@ -311,6 +342,21 @@ public class ServerForm extends javax.swing.JFrame {
         
         serverInstance.addRoom(dialog.RoomName);
     }//GEN-LAST:event_subButtonRoomAddActionPerformed
+
+    private void subButtonRoomRenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonRoomRenameActionPerformed
+        if(listRooms.getSelectedIndex() == -1) {
+            showMessage("Error","No room selected.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String selectedRoom = getRoomFromList(listRooms.getSelectedIndex());
+        if(selectedRoom.equals("Default")) {
+            showMessage("Error","Can't rename Default room.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        System.out.println(selectedRoom);
+    }//GEN-LAST:event_subButtonRoomRenameActionPerformed
 
     /**
      * @param args the command line arguments
@@ -363,6 +409,7 @@ public class ServerForm extends javax.swing.JFrame {
     private javax.swing.JPanel panelLog;
     private javax.swing.JPanel panelStatus;
     private javax.swing.JMenuItem subButtonRoomAdd;
+    private javax.swing.JMenuItem subButtonRoomRename;
     private javax.swing.JMenuItem subButtonShowAccounts;
     private javax.swing.JMenuItem subButtonStart;
     private javax.swing.JMenuItem subButtonStop;

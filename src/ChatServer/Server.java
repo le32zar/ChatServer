@@ -97,7 +97,8 @@ public class Server
         
         Message replyMsg;
         if(_clientMap.containsKey(name)) {
-            replyMsg = new Message(MessageType.LOGIN_REPLY, "server", "newClient", "CLIENT_ALREADY_CONNECTED");
+            // already connected
+            replyMsg = new Message(MessageType.LOGIN_REPLY, "server", "newClient", "ALREADY_CONNECTED");
             log(replyMsg);
             out.writeObject(replyMsg);
             out.flush();
@@ -106,12 +107,11 @@ public class Server
             in.close();
             clientSocket.close();
             log("Client connection attempt refused because user with same name is already connected.");
-            
-            return;
         }
         else {
             if(Accounts.accountExists(name)) {
                 if(!Accounts.authenticate(name, password)) {
+                    // wrong credentials
                     replyMsg = new Message(MessageType.LOGIN_REPLY, "server", "newClient", "WRONG_CREDENTIALS");
                     log(replyMsg);
                     out.writeObject(replyMsg);
@@ -121,30 +121,47 @@ public class Server
                     in.close();
                     clientSocket.close();
                     log("Client connection attempt refused because of wrong credentials.");
-                    
-                    return;
+                } else {
+                    // logged in
+                    replyMsg = new Message(MessageType.LOGIN_REPLY, "server", "newClient", "ACCEPTED");
+                    log(replyMsg);
+                    out.writeObject(replyMsg);
+                    out.flush();
+                
+                    ClientThread thread = new ClientThread(this, clientSocket, name, out, in);
+                    _clientMap.put(name, thread);
+                    _roomMap.get("Default").put(name, thread);
+                    thread.start();
+        
+                    Message msg = new Message(MessageType.INTERNAL, "server", null, "CLIENT_CONNECTED", name);
+                    forwardPublic(msg, name);
+                
+                    updateForm();
+                    log("Client " + name + " succesfully connected.");
                 }
             } else {
+                // new registered
                 Accounts.createAccount(name, password);
                 log("Client registered new account with given credentials.");
+                replyMsg = new Message(MessageType.LOGIN_REPLY, "server", "newClient", "ACCEPTED_NEW");
+                log(replyMsg);
+                out.writeObject(replyMsg);
+                out.flush();
+                
+                ClientThread thread = new ClientThread(this, clientSocket, name, out, in);
+                _clientMap.put(name, thread);
+                _roomMap.get("Default").put(name, thread);
+                thread.start();
+        
+                Message msg = new Message(MessageType.INTERNAL, "server", null, "CLIENT_CONNECTED", name);
+                forwardPublic(msg, name);
+                
+                updateForm();
+                log("Client " + name + " succesfully connected.");
             }
         }
         
-        replyMsg = new Message(MessageType.LOGIN_REPLY, "server", "newClient", "ACCEPTED");
-        log(replyMsg);
-        out.writeObject(replyMsg);
-        out.flush();
-                
-        ClientThread thread = new ClientThread(this, clientSocket, name, out, in);
-        _clientMap.put(name, thread);
-        _roomMap.get("Default").put(name, thread);
-        thread.start();
         
-        Message msg = new Message(MessageType.INTERNAL, "server", null, "USER_CONNECTED", name);
-        forwardPublic(msg, name);
-                
-        updateForm();
-        log("Client " + name + " succesfully connected.");
     }
     
     public synchronized void logoutClient(String clientName, String roomName) {
@@ -152,7 +169,7 @@ public class Server
         _clientMap.remove(clientName);
         _roomMap.get(roomName).remove(clientName);    
         
-        Message msg = new Message(MessageType.INTERNAL, "server", null, "USER_DISCONNECTED", clientName, roomName);
+        Message msg = new Message(MessageType.INTERNAL, "server", null, "CLIENT_DISCONNECTED", clientName, roomName);
         forwardPublic(msg, null);
         
         updateForm();
@@ -294,7 +311,7 @@ public class Server
         
         if(!_roomMap.containsKey(newRoom) || oldRoom.equals(newRoom)) {
             // Inform Client that room change wasn't successful 
-            Message msg = new Message(MessageType.INTERNAL, "server", client.ClientName, "REPLY_ROOM_CHANGE", "false", oldRoom, oldRoom);
+            Message msg = new Message(MessageType.INTERNAL, "server", client.ClientName, "REPLY_CHANGE_ROOM", "false", oldRoom, oldRoom);
             client.sendMessage(msg);
             return;
         }
@@ -304,7 +321,7 @@ public class Server
         client.RoomName = newRoom;
         
         // Inform client about successful room change
-        Message msgReply = new Message(MessageType.INTERNAL, "server", clientName, "REPLY_ROOM_CHANGE", "true", oldRoom, newRoom);
+        Message msgReply = new Message(MessageType.INTERNAL, "server", clientName, "REPLY_CHANGE_ROOM", "true", oldRoom, newRoom);
         client.sendMessage(msgReply);
         
         // Inform other clients about room change
@@ -327,7 +344,7 @@ public class Server
         
     public final void setStatus(ServerStatus status) {
         Status = status;
-        _form.setStatus(status);
+        _form.updateStatus(status);
     }
     
     private void updateForm() {

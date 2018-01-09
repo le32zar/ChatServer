@@ -67,7 +67,7 @@ public class ClientThread extends Thread
     }
     
     public void close(boolean logout) throws IOException, ClassNotFoundException {
-        Message msg = new Message(MessageType.INTERNAL, "server", ClientName, "CONNECTION_CLOSED");
+        Message msg = new Message(MessageType.INTERNAL, "server", ClientName, "CLOSE_CONNECTION");
         _out.writeObject(msg);        
         _in.readObject();
         
