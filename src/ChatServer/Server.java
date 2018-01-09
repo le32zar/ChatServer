@@ -262,7 +262,7 @@ public class Server
         forwardPublic(msg, null);
                         
         updateForm();
-        log(String.format("Room \"%s\" was renamed to \"\".", roomName, newName));
+        log(String.format("Room \"%s\" was renamed to \"%s\".", roomName, newName));
         return true;
     }
     
@@ -311,7 +311,7 @@ public class Server
         
         if(!_roomMap.containsKey(newRoom) || oldRoom.equals(newRoom)) {
             // Inform Client that room change wasn't successful 
-            Message msg = new Message(MessageType.INTERNAL, "server", client.ClientName, "REPLY_CHANGE_ROOM", "false", oldRoom, oldRoom);
+            Message msg = new Message(MessageType.INTERNAL, "server", client.ClientName, "REPLY_CHANGE_ROOM", "false");
             client.sendMessage(msg);
             return;
         }
@@ -321,7 +321,7 @@ public class Server
         client.RoomName = newRoom;
         
         // Inform client about successful room change
-        Message msgReply = new Message(MessageType.INTERNAL, "server", clientName, "REPLY_CHANGE_ROOM", "true", oldRoom, newRoom);
+        Message msgReply = new Message(MessageType.INTERNAL, "server", clientName, "REPLY_CHANGE_ROOM", "true", newRoom);
         client.sendMessage(msgReply);
         
         // Inform other clients about room change
