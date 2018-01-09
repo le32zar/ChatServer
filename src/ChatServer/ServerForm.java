@@ -317,7 +317,7 @@ public class ServerForm extends javax.swing.JFrame {
 
     private void subButtonStopActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonStopActionPerformed
         if(serverInstance.Status != ServerStatus.Default && serverInstance.Status != ServerStatus.Stopped) {
-            serverInstance.stop();
+            serverInstance.stop(); 
         }
         
         updateRunningComponents(false);

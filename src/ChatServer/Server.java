@@ -70,8 +70,9 @@ public class Server
     public synchronized void stop() {
         log("Stopping Server...");
         try {
-            for(ClientThread client : _clientMap.values() ) {
-                client.close(false);
+            for(ClientThread client : _clientMap.values() ) {     
+                client.close(false); 
+                System.out.println("TEST_FOR");
             }
             _clientMap.clear();
             _roomMap.clear();
@@ -80,7 +81,7 @@ public class Server
             setServerStatus(ServerStatus.Stopped);
             updateForm();
             log("Server was stopped.");
-        } catch (IOException | ClassNotFoundException ex) {
+        } catch (IOException ex) {
             log("Exception while trying to close server: " + ex.getMessage());
         }
         //Thread.currentThread().interrupt();
@@ -209,7 +210,6 @@ public class Server
         }
     }
 
-    
     /**
      * Returns if a room with the given name exists.
      * @param roomName

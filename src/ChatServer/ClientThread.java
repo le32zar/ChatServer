@@ -69,10 +69,16 @@ public class ClientThread extends Thread
         }
     }
     
-    public void close(boolean logout) throws IOException, ClassNotFoundException {
-        Message msg = new Message(MessageType.INTERNAL, "server", ClientName, "CLOSE_CONNECTION");
-        _out.writeObject(msg);        
-        _in.readObject();
+    public void close(boolean logout) {
+        System.out.println("TEST1");
+        try {        
+            Message msg = new Message(MessageType.INTERNAL, "server", ClientName, "CLOSE_CONNECTION");
+            _out.writeObject(msg);
+            _in.readObject();
+        } catch (ClassNotFoundException | IOException ex) {
+            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+        } 
+        System.out.println("TEST2");
         
         closeInternal(logout);
     }
@@ -85,11 +91,10 @@ public class ClientThread extends Thread
             _in.close();
             _out.close();
         } catch (IOException ex) {
-            Server.log("[Client: " + ClientName + "]Exception while closing client thread: " + ex.getMessage());
+            Server.log("[Client: " + ClientName + "]Exception while trying to close client thread: " + ex.getMessage());
         }
         
         if(logout) Server.logoutClient(ClientName, RoomName);
-        this.interrupt();
     }
     
     public void sendMessage(Message msg){

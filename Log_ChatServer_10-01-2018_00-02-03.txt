@@ -1,0 +1,33 @@
+[00-02]  Created ServerSocket at 0.0.0.0 on port 1501
+[00-02]  Client tries to connect...
+[00-02]  <-- newClient [LOGIN_REQUEST: g�nther]
+[00-02]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-02]  Client g�nther succesfully connected.
+[00-02]  Client tries to connect...
+[00-02]  <-- newClient [LOGIN_REQUEST: harald]
+[00-02]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-02]  --> g�nther [INTERNAL: CLIENT_CONNECTED]
+[00-02]  Client harald succesfully connected.
+[00-02]  Client tries to connect...
+[00-02]  <-- newClient [LOGIN_REQUEST: niklas]
+[00-02]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-02]  --> harald [INTERNAL: CLIENT_CONNECTED]
+[00-02]  --> g�nther [INTERNAL: CLIENT_CONNECTED]
+[00-02]  Client niklas succesfully connected.
+[00-02]  Client tries to connect...
+[00-03]  <-- newClient [LOGIN_REQUEST: gunther]
+[00-03]  Client registered new account with given credentials.
+[00-03]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[00-03]  --> niklas [INTERNAL: CLIENT_CONNECTED]
+[00-03]  --> harald [INTERNAL: CLIENT_CONNECTED]
+[00-03]  --> g�nther [INTERNAL: CLIENT_CONNECTED]
+[00-03]  --> niklas [INTERNAL: CLIENT_DISCONNECTED]
+[00-03]  Client gunther succesfully connected.
+[00-03]  --> harald [INTERNAL: CLIENT_DISCONNECTED]
+[00-03]  --> g�nther [INTERNAL: CLIENT_DISCONNECTED]
+[00-03]  Client gunther disconnected.
+[00-04]  Stopping Server...
+[00-04]  Server was stopped.
+[00-04]  Created ServerSocket at 0.0.0.0 on port 1501
+[00-04]  Stopping Server...
+[00-04]  Server was stopped.

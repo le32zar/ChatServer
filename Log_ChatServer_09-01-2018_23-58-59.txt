@@ -1,0 +1,41 @@
+[23-59]  Created ServerSocket at 0.0.0.0 on port 1501
+[23-59]  Client tries to connect...
+[23-59]  <-- newClient [LOGIN_REQUEST: niklas]
+[23-59]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[23-59]  Client niklas succesfully connected.
+[23-59]  Stopping Server...
+[23-59]  Server was stopped.
+[23-59]  Created ServerSocket at 0.0.0.0 on port 1501
+[23-59]  Client tries to connect...
+[23-59]  <-- newClient [LOGIN_REQUEST: niklas]
+[23-59]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[23-59]  Client niklas succesfully connected.
+[23-59]  Client tries to connect...
+[00-00]  <-- newClient [LOGIN_REQUEST: harald]
+[00-00]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-00]  --> niklas [INTERNAL: CLIENT_CONNECTED]
+[00-00]  Client harald succesfully connected.
+[00-00]  Client tries to connect...
+[00-00]  <-- newClient [LOGIN_REQUEST: g�nther]
+[00-00]  Client registered new account with given credentials.
+[00-00]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[00-00]  --> niklas [INTERNAL: CLIENT_CONNECTED]
+[00-00]  --> harald [INTERNAL: CLIENT_CONNECTED]
+[00-00]  --> niklas [INTERNAL: CLIENT_DISCONNECTED]
+[00-00]  Client g�nther succesfully connected.
+[00-00]  --> harald [INTERNAL: CLIENT_DISCONNECTED]
+[00-00]  Client g�nther disconnected.
+[00-00]  Client tries to connect...
+[00-00]  <-- newClient [LOGIN_REQUEST: hunter]
+[00-00]  Client registered new account with given credentials.
+[00-00]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[00-00]  --> niklas [INTERNAL: CLIENT_CONNECTED]
+[00-00]  --> harald [INTERNAL: CLIENT_CONNECTED]
+[00-00]  Client hunter succesfully connected.
+[00-00]  --> niklas [INTERNAL: CLIENT_DISCONNECTED]
+[00-00]  --> harald [INTERNAL: CLIENT_DISCONNECTED]
+[00-00]  Client hunter disconnected.
+[00-01]  --> niklas [INTERNAL: CLIENT_DISCONNECTED]
+[00-01]  Client harald disconnected.
+[00-01]  Stopping Server...
+[00-01]  Server was stopped.
