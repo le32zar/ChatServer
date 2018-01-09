@@ -27,7 +27,7 @@ public class Server
         
         Name = name;
         Port = port;
-        setStatus(ServerStatus.Default);
+        setServerStatus(ServerStatus.Default);
         Accounts = new AccountManager(ACCOUNT_PATH);
     }
     
@@ -38,11 +38,11 @@ public class Server
         try {
             _socket = new ServerSocket(Port);
             log(String.format("Created ServerSocket at %s on port %d", getHost(), getPort()) );
-            setStatus(ServerStatus.Initialized);
+            setServerStatus(ServerStatus.Initialized);
         } catch(IOException ex)
         {
             log("Error while creating ServerSocket: " + ex.getMessage());
-            setStatus(ServerStatus.Error);
+            setServerStatus(ServerStatus.Error);
         }
         
         updateForm();
@@ -53,7 +53,7 @@ public class Server
         if(Status != ServerStatus.Initialized) {
             log("Server has to be initialized.");
             return;
-        } else setStatus(ServerStatus.Running);
+        } else setServerStatus(ServerStatus.Running);
         
         while(Status == ServerStatus.Running) {
             try {
@@ -77,7 +77,7 @@ public class Server
             _roomMap.clear();
             
             _socket.close();
-            setStatus(ServerStatus.Stopped);
+            setServerStatus(ServerStatus.Stopped);
             updateForm();
             log("Server was stopped.");
         } catch (IOException | ClassNotFoundException ex) {
@@ -208,33 +208,7 @@ public class Server
             }
         }
     }
-    
-    /**
-    Returns a String array containing the names of all clients in the given Room.
-    Returns a String array containing the names of all clients if the given Room is null or empty.
-    Returns null if the given Room doesn't exists.
-    **/
-    public synchronized String[] getClientNames(String roomName) {
-        String[] result = null;
-        
-        if(roomName == null || roomName.equals("")) {
-            result = new String[_clientMap.size()];
-            int i = 0;
-        
-            for(String name : _clientMap.keySet()) {
-                result[i++] = name;
-            }
-        } else if(_roomMap.containsKey(roomName)) {
-            result = new String[_roomMap.get(roomName).size()];
-            int i = 0;
-        
-            for(String name : _roomMap.get(roomName).keySet()) {
-                result[i++] = name;
-            }
-        }
-        
-        return result;
-    }
+
     
     /**
      * Returns if a room with the given name exists.
@@ -296,6 +270,7 @@ public class Server
         for(String clientName : room.keySet()) {
             changeRoom(clientName, "Default");
         }
+        _roomMap.remove(roomName);
         
         Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_REMOVED", roomName);
         forwardPublic(msg, null);
@@ -332,6 +307,15 @@ public class Server
         log(String.format("Client \"%s\" moved from room \"%s\" to \"%s\".", clientName, oldRoom, newRoom));
     }
     
+    public synchronized void sendRoomClientMap(String clientName) {
+        ClientThread client = _clientMap.get(clientName);
+        
+        Message replyMsg = new Message(MessageType.INTERNAL, "server", clientName,"REPLY_STATUSLIST");
+        
+        client.sendMessage(replyMsg);
+        client.sendObject(getRoomClientMap());
+    }
+    
     public int getPort() 
     {
         return _socket.getLocalPort();
@@ -342,12 +326,12 @@ public class Server
         return _socket.getInetAddress().getHostAddress();
     }
         
-    public final void setStatus(ServerStatus status) {
+    public final void setServerStatus(ServerStatus status) {
         Status = status;
         _form.updateStatus(status);
     }
     
-    private void updateForm() {
+    private HashMap<String, String[]> getRoomClientMap() {
         HashMap<String, String[]> roomUserMap = new HashMap<>();
         
         _roomMap.forEach( (roomName, clientMap) ->  {
@@ -356,7 +340,11 @@ public class Server
             roomUserMap.put(roomName, userNames);
         });
         
-        _form.updateUserAndRooms(roomUserMap);
+        return roomUserMap;
+    }
+    
+    private void updateForm() {
+        _form.updateUserAndRooms(getRoomClientMap());
     }
     
     public void log(Object o) {

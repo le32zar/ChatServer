@@ -20,6 +20,8 @@ public class AddRoomDialog extends javax.swing.JDialog {
     public AddRoomDialog(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
         initComponents();
+        
+        Canceled = true;
     }
 
     /**
@@ -99,7 +101,6 @@ public class AddRoomDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
-        Canceled = true;
         this.setVisible(false);
     }//GEN-LAST:event_buttonCancelActionPerformed
 
@@ -110,6 +111,7 @@ public class AddRoomDialog extends javax.swing.JDialog {
         }
 
         RoomName = textFieldName.getText();
+        Canceled = false;
         this.setVisible(false);
     }//GEN-LAST:event_buttonAddActionPerformed
 

@@ -42,7 +42,7 @@ public class ClientThread extends Thread
                         Server.forwardPrivate(msg);
                         break;
                     case INTERNAL:
-                        handleInternal(msg.Text);
+                        handleInternal(msg);
                         break;
                     case RECEIVED:
                         Server.log("[Client: " + ClientName + "] Received " + msg.Text[0]);
@@ -55,12 +55,15 @@ public class ClientThread extends Thread
         }
     }
     
-    private void handleInternal(String[] msg) {
-        switch(msg[0]) {
+    private void handleInternal(Message msg) {
+        switch(msg.Text[0]) {
             case "CLOSE_CONNECTION":
                 closeInternal(true);
                 break;
-            case "CHANGE_ROOM":
+            case "REQUEST_CHANGE_ROOM":
+                Server.changeRoom(msg.Sender, msg.Text[1]);
+                break;
+            case "REQUEST_STATUSLIST":
                 
                 break;
         }
@@ -97,6 +100,15 @@ public class ClientThread extends Thread
             _out.flush();
         } catch (IOException ex) {
             Server.log("[Client: " + ClientName + "]Exception while trying to send Message: " + ex.getMessage());
+        }
+    }
+    
+    public void sendObject(Serializable obj) {
+        try {
+            _out.writeObject(obj);
+            _out.flush();
+        } catch (IOException ex) {
+            Server.log("[Client: " + ClientName + "]Exception while trying to send Object: " + ex.getMessage());
         }
     }
 

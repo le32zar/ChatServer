@@ -12,7 +12,6 @@ package ChatServer.Dialogs;
 public class RenameRoomDialog extends javax.swing.JDialog {
 
     public boolean Canceled;
-    public String OldRoomName;
     public String NewRoomName;
 
     /**
@@ -22,8 +21,7 @@ public class RenameRoomDialog extends javax.swing.JDialog {
         super(parent, modal);
         initComponents();
         
-        Canceled = false;
-        OldRoomName = oldRoomName;
+        Canceled = true;
         labelOldName.setText(oldRoomName);
     }
 
@@ -121,7 +119,6 @@ public class RenameRoomDialog extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void buttonCancelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonCancelActionPerformed
-        Canceled = true;
         this.setVisible(false);
     }//GEN-LAST:event_buttonCancelActionPerformed
 
@@ -131,7 +128,8 @@ public class RenameRoomDialog extends javax.swing.JDialog {
             return;
         }
 
-        NewRoomName = textFieldName.getText();
+        NewRoomName = textFieldNewName.getText();
+        Canceled = false;
         this.setVisible(false);
     }//GEN-LAST:event_buttonRenameActionPerformed
 

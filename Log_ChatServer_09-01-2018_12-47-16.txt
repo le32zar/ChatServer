@@ -1,3 +1,0 @@
-[12-47]  Created ServerSocket at 0.0.0.0 on port 1501
-[12-47]  Stopping Server...
-[12-47]  Server was stopped.

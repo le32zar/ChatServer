@@ -1,4 +1,0 @@
-[13-02]  Created ServerSocket at 0.0.0.0 on port 1501
-[13-02]  Room "Test" was added.
-[13-03]  Stopping Server...
-[13-03]  Server was stopped.

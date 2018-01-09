@@ -98,12 +98,12 @@ public class ServerForm extends javax.swing.JFrame {
         buttonRoom.setEnabled(enabled);
     }
     
-    private String getRoomFromList(int index) {
-        return listRooms.getSelectedValuesList().get(index).split(" \\([0-9]* User\\)$")[0];
+    private String getRoomFromList() {
+        return listRooms.getSelectedValuesList().get(0).split(" \\([0-9]* User\\)$")[0];
     }
     
-    private String getUserFromList(int index) {
-        return listUsers.getSelectedValuesList().get(index).split("^\\[.*\\] ")[0];
+    private String getUserFromList() {
+        return listUsers.getSelectedValuesList().get(0).split("^\\[.*\\] ")[0];
     }
     
     /**
@@ -133,6 +133,7 @@ public class ServerForm extends javax.swing.JFrame {
         buttonRoom = new javax.swing.JMenu();
         subButtonRoomAdd = new javax.swing.JMenuItem();
         subButtonRoomRename = new javax.swing.JMenuItem();
+        subButtonRoomRemove = new javax.swing.JMenuItem();
         buttonOptions = new javax.swing.JMenu();
         subButtonShowAccounts = new javax.swing.JMenuItem();
 
@@ -249,6 +250,14 @@ public class ServerForm extends javax.swing.JFrame {
         });
         buttonRoom.add(subButtonRoomRename);
 
+        subButtonRoomRemove.setText("Remove");
+        subButtonRoomRemove.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subButtonRoomRemoveActionPerformed(evt);
+            }
+        });
+        buttonRoom.add(subButtonRoomRemove);
+
         menuMain.add(buttonRoom);
 
         buttonOptions.setText("Options");
@@ -335,7 +344,9 @@ public class ServerForm extends javax.swing.JFrame {
         if(dialog.Canceled) return;
         
         while(serverInstance.roomExists(dialog.RoomName)) {
-            JOptionPane.showMessageDialog(null,"The given room already exists.","Room already exists", JOptionPane.ERROR);
+            JOptionPane.showMessageDialog(null,"The given room already exists.","Room already exists", JOptionPane.ERROR_MESSAGE);
+            
+            dialog.Canceled = true;
             dialog.setVisible(true);
             if(dialog.Canceled) return;
         }
@@ -349,15 +360,46 @@ public class ServerForm extends javax.swing.JFrame {
             return;
         }
         
-        String selectedRoom = getRoomFromList(listRooms.getSelectedIndex());
+        String selectedRoom = getRoomFromList();
         if(selectedRoom.equals("Default")) {
             showMessage("Error","Can't rename Default room.", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
-        System.out.println(selectedRoom);
+        RenameRoomDialog dialog = new RenameRoomDialog(this, true, selectedRoom);
+        dialog.setVisible(true);
+        if(dialog.Canceled) return;
+        
+        while(serverInstance.roomExists(dialog.NewRoomName)) {
+            JOptionPane.showMessageDialog(null,"The given room already exists.","Room already exists", JOptionPane.ERROR_MESSAGE);
+            
+            dialog.Canceled = true;
+            dialog.setVisible(true);
+            if(dialog.Canceled) return;
+        }
+        
+        serverInstance.renameRoom(selectedRoom, dialog.NewRoomName);
     }//GEN-LAST:event_subButtonRoomRenameActionPerformed
 
+    private void subButtonRoomRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonRoomRemoveActionPerformed
+        if(listRooms.getSelectedIndex() == -1) {
+            showMessage("Error","No room selected.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String selectedRoom = getRoomFromList();
+        if(selectedRoom.equals("Default")) {
+            showMessage("Error","Can't remove Default room.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        if(JOptionPane.showConfirmDialog(null,"Do you really want to delete room " + selectedRoom,"Remove", JOptionPane.YES_NO_OPTION) ==  JOptionPane.YES_OPTION) {
+            serverInstance.removeRoom(selectedRoom);
+        }
+    }//GEN-LAST:event_subButtonRoomRemoveActionPerformed
+
+    
+    
     /**
      * @param args the command line arguments
      */
@@ -409,6 +451,7 @@ public class ServerForm extends javax.swing.JFrame {
     private javax.swing.JPanel panelLog;
     private javax.swing.JPanel panelStatus;
     private javax.swing.JMenuItem subButtonRoomAdd;
+    private javax.swing.JMenuItem subButtonRoomRemove;
     private javax.swing.JMenuItem subButtonRoomRename;
     private javax.swing.JMenuItem subButtonShowAccounts;
     private javax.swing.JMenuItem subButtonStart;

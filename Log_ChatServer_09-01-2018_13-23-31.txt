@@ -1,4 +1,0 @@
-[13-23]  Created ServerSocket at 0.0.0.0 on port 1501
-[13-23]  Room "afsdf" was added.
-[13-25]  Stopping Server...
-[13-25]  Server was stopped.
