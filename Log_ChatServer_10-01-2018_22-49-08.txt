@@ -1,0 +1,9 @@
+[22-49]  Server name changed from ChatServer to ChatServersdf.
+[22-49]  Created ServerSocket at 0.0.0.0 on port 1501
+[22-49]  Server name changed from ChatServersdf to ChatServ.
+[22-49]  Stopping Server...
+[22-49]  Server was stopped.
+[22-49]  Port changed from 1501 to 1503.
+[22-49]  Created ServerSocket at 0.0.0.0 on port 1503
+[22-49]  Stopping Server...
+[22-49]  Server was stopped.

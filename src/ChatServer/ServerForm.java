@@ -23,6 +23,9 @@ public class ServerForm extends javax.swing.JFrame {
     private DefaultListModel userListModel;
     private DefaultListModel roomListModel;
     
+    private int Port = 1501;
+    private String ServerName = "ChatServer";  
+    
     public ServerForm() {
         // Initialize Swing Components
         userListModel = new DefaultListModel();
@@ -39,7 +42,8 @@ public class ServerForm extends javax.swing.JFrame {
             logString("Error while trying to create Log file: " + ex.getMessage());
         }
         
-        serverInstance = new Server(1501, "ChatServer", this);       
+        serverInstance = new Server(Port, ServerName, this); 
+        lblServerName.setText("Server Name: " + ServerName);      
         
     }
     
@@ -119,6 +123,7 @@ public class ServerForm extends javax.swing.JFrame {
         jScrollPane1 = new javax.swing.JScrollPane();
         textAreaLog = new javax.swing.JTextArea();
         lblServerStatus = new javax.swing.JLabel();
+        lblServerName = new javax.swing.JLabel();
         panelStatus = new javax.swing.JPanel();
         tabbedPanelStatus = new javax.swing.JTabbedPane();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -139,6 +144,7 @@ public class ServerForm extends javax.swing.JFrame {
         subButtonRoomRemove = new javax.swing.JMenuItem();
         buttonOptions = new javax.swing.JMenu();
         subButtonShowAccounts = new javax.swing.JMenuItem();
+        subButtonServerOptions = new javax.swing.JMenuItem();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatServer 0.1");
@@ -160,6 +166,10 @@ public class ServerForm extends javax.swing.JFrame {
         lblServerStatus.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
         lblServerStatus.setText("jLabel2");
 
+        lblServerName.setFont(new java.awt.Font("Tahoma", 0, 12)); // NOI18N
+        lblServerName.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblServerName.setText("jLabel2");
+
         javax.swing.GroupLayout panelLogLayout = new javax.swing.GroupLayout(panelLog);
         panelLog.setLayout(panelLogLayout);
         panelLogLayout.setHorizontalGroup(
@@ -170,15 +180,18 @@ public class ServerForm extends javax.swing.JFrame {
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 410, Short.MAX_VALUE)
                     .addGroup(panelLogLayout.createSequentialGroup()
                         .addComponent(lblServerStatus)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(lblServerName)))
                 .addContainerGap())
         );
         panelLogLayout.setVerticalGroup(
             panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, panelLogLayout.createSequentialGroup()
-                .addComponent(lblServerStatus)
+                .addGroup(panelLogLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblServerStatus)
+                    .addComponent(lblServerName))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jScrollPane1)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 502, Short.MAX_VALUE)
                 .addContainerGap())
         );
 
@@ -298,6 +311,14 @@ public class ServerForm extends javax.swing.JFrame {
         });
         buttonOptions.add(subButtonShowAccounts);
 
+        subButtonServerOptions.setText("Server Options");
+        subButtonServerOptions.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subButtonServerOptionsActionPerformed(evt);
+            }
+        });
+        buttonOptions.add(subButtonServerOptions);
+
         menuMain.add(buttonOptions);
 
         setJMenuBar(menuMain);
@@ -355,6 +376,7 @@ public class ServerForm extends javax.swing.JFrame {
         if(serverInstance.Status != ServerStatus.Default && serverInstance.Status != ServerStatus.Stopped) {
             serverInstance.stop();
         }
+        
         logWriter.close();
     }//GEN-LAST:event_formWindowClosing
 
@@ -465,6 +487,32 @@ public class ServerForm extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_subButtonUserBanActionPerformed
 
+    private void subButtonServerOptionsActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonServerOptionsActionPerformed
+        SettingsDialog dialog = new SettingsDialog(this, true, Port, ServerName);
+        dialog.setVisible(true);  
+        
+        if(!dialog.ServerName.equals(ServerName)) {
+            logString("Server name changed from " + ServerName + " to " + dialog.ServerName + ".");
+            ServerName = dialog.ServerName;
+            lblServerName.setText("Server Name: " + ServerName);
+        }
+                
+        if(dialog.Port != Port) {
+            boolean wasRunning = (ServerStatus.Running == serverInstance.Status);
+            //Stop server
+            subButtonStopActionPerformed(null);
+            
+            //Log and change port
+            logString("Port changed from " + Port + " to " + dialog.Port + ".");
+            Port = dialog.Port;
+            
+            serverInstance = new Server(Port, ServerName, this);
+            
+            //Restart server
+            if(wasRunning) subButtonStartActionPerformed(null);
+        } 
+    }//GEN-LAST:event_subButtonServerOptionsActionPerformed
+
     
     
     /**
@@ -511,6 +559,7 @@ public class ServerForm extends javax.swing.JFrame {
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
+    private javax.swing.JLabel lblServerName;
     private javax.swing.JLabel lblServerStatus;
     private javax.swing.JList<String> listRooms;
     private javax.swing.JList<String> listUsers;
@@ -520,6 +569,7 @@ public class ServerForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem subButtonRoomAdd;
     private javax.swing.JMenuItem subButtonRoomRemove;
     private javax.swing.JMenuItem subButtonRoomRename;
+    private javax.swing.JMenuItem subButtonServerOptions;
     private javax.swing.JMenuItem subButtonShowAccounts;
     private javax.swing.JMenuItem subButtonStart;
     private javax.swing.JMenuItem subButtonStop;

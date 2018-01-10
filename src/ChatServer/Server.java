@@ -202,7 +202,9 @@ public class Server
         String clientSender = msg.Sender;
         msg.Sender = msg.Receiver;
         
-        for(ClientThread client : _roomMap.get(msg.Receiver).values()) {
+        System.out.println(msg.Sender);
+        
+        for(ClientThread client : _roomMap.get(msg.Sender).values()) {
             if(!client.ClientName.equals(clientSender)) {
                 msg.Receiver = client.ClientName;
                 client.sendMessage(msg);
