@@ -1,7 +1,0 @@
-[23-40]  Created ServerSocket at 0.0.0.0 on port 1501
-[23-40]  Client tries to connect...
-[23-40]  <-- newClient [LOGIN_REQUEST: niklas]
-[23-40]  --> newClient [LOGIN_REPLY: ACCEPTED]
-[23-40]  Client niklas succesfully connected.
-[23-41]  Stopping Server...
-[23-41]  Exception while trying to close server: Connection reset

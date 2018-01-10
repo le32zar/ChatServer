@@ -316,6 +316,24 @@ public class Server
         client.sendObject(getRoomClientMap());
     }
     
+    public synchronized void sendServerMessage(String clientName, String msgText) {
+        ClientThread client = _clientMap.get(clientName);
+        
+        Message msg = new Message(MessageType.PRIVATE, "server", clientName, msgText);
+        
+        client.sendMessage(msg);
+    }
+    
+    public synchronized void kickClient(String clientName) {
+        ClientThread client = _clientMap.get(clientName);
+        client.close(true);
+    }
+    
+    public synchronized void banClient(String clientName) {
+        Accounts.banAccount(clientName);
+        kickClient(clientName);
+    }
+    
     public int getPort() 
     {
         return _socket.getLocalPort();

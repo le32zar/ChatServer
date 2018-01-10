@@ -71,7 +71,7 @@ public class ServerForm extends javax.swing.JFrame {
         logWriter.print(logText);
     }
     
-    public void showMessage(String title, String text, int jOpenPane) {
+    public void showMessageDialog(String title, String text, int jOpenPane) {
         JOptionPane.showMessageDialog(null,text,title, jOpenPane);
     }
     
@@ -99,11 +99,11 @@ public class ServerForm extends javax.swing.JFrame {
     }
     
     private String getRoomFromList() {
-        return listRooms.getSelectedValuesList().get(0).split(" \\([0-9]* User\\)$")[0];
+        return listRooms.getSelectedValue().split(" \\([0-9]* User\\)$")[0];
     }
     
-    private String getUserFromList() {
-        return listUsers.getSelectedValuesList().get(0).split("^\\[.*\\] ")[0];
+    private String getUserFromList() {        
+        return listUsers.getSelectedValue().split("^\\[.*\\] ")[1];
     }
     
     /**
@@ -130,6 +130,9 @@ public class ServerForm extends javax.swing.JFrame {
         subButtonStart = new javax.swing.JMenuItem();
         subButtonStop = new javax.swing.JMenuItem();
         buttonUser = new javax.swing.JMenu();
+        subButtonUserMessage = new javax.swing.JMenuItem();
+        subButtonUserKick = new javax.swing.JMenuItem();
+        subButtonUserBan = new javax.swing.JMenuItem();
         buttonRoom = new javax.swing.JMenu();
         subButtonRoomAdd = new javax.swing.JMenuItem();
         subButtonRoomRename = new javax.swing.JMenuItem();
@@ -230,6 +233,31 @@ public class ServerForm extends javax.swing.JFrame {
         menuMain.add(buttonServer);
 
         buttonUser.setText("User");
+
+        subButtonUserMessage.setText("Send Message");
+        subButtonUserMessage.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subButtonUserMessageActionPerformed(evt);
+            }
+        });
+        buttonUser.add(subButtonUserMessage);
+
+        subButtonUserKick.setText("Kick");
+        subButtonUserKick.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subButtonUserKickActionPerformed(evt);
+            }
+        });
+        buttonUser.add(subButtonUserKick);
+
+        subButtonUserBan.setText("Ban");
+        subButtonUserBan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                subButtonUserBanActionPerformed(evt);
+            }
+        });
+        buttonUser.add(subButtonUserBan);
+
         menuMain.add(buttonUser);
 
         buttonRoom.setText("Room");
@@ -356,13 +384,13 @@ public class ServerForm extends javax.swing.JFrame {
 
     private void subButtonRoomRenameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonRoomRenameActionPerformed
         if(listRooms.getSelectedIndex() == -1) {
-            showMessage("Error","No room selected.", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog("Error","No room selected.", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         String selectedRoom = getRoomFromList();
         if(selectedRoom.equals("Default")) {
-            showMessage("Error","Can't rename Default room.", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog("Error","Can't rename Default room.", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -383,13 +411,13 @@ public class ServerForm extends javax.swing.JFrame {
 
     private void subButtonRoomRemoveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonRoomRemoveActionPerformed
         if(listRooms.getSelectedIndex() == -1) {
-            showMessage("Error","No room selected.", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog("Error","No room selected.", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
         String selectedRoom = getRoomFromList();
         if(selectedRoom.equals("Default")) {
-            showMessage("Error","Can't remove Default room.", JOptionPane.ERROR_MESSAGE);
+            showMessageDialog("Error","Can't remove Default room.", JOptionPane.ERROR_MESSAGE);
             return;
         }
         
@@ -397,6 +425,45 @@ public class ServerForm extends javax.swing.JFrame {
             serverInstance.removeRoom(selectedRoom);
         }
     }//GEN-LAST:event_subButtonRoomRemoveActionPerformed
+
+    private void subButtonUserMessageActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonUserMessageActionPerformed
+        if(listUsers.getSelectedIndex() == -1) {
+            showMessageDialog("Error","No user selected.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String selectedUser = getUserFromList();
+        
+        SendMessageDialog dialog = new SendMessageDialog(this, true);
+        dialog.setVisible(true);
+        
+        if(dialog.Canceled) return;
+        
+        serverInstance.sendServerMessage(selectedUser, dialog.MessageText);
+    }//GEN-LAST:event_subButtonUserMessageActionPerformed
+
+    private void subButtonUserKickActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonUserKickActionPerformed
+        if(listUsers.getSelectedIndex() == -1) {
+            showMessageDialog("Error","No user selected.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String selectedUser = getUserFromList();
+        serverInstance.kickClient(selectedUser);
+    }//GEN-LAST:event_subButtonUserKickActionPerformed
+
+    private void subButtonUserBanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_subButtonUserBanActionPerformed
+        if(listUsers.getSelectedIndex() == -1) {
+            showMessageDialog("Error","No user selected.", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        String selectedUser = getUserFromList();
+        
+        if(JOptionPane.showConfirmDialog(null,"Do you really want to ban user " + selectedUser,"Ban", JOptionPane.YES_NO_OPTION) ==  JOptionPane.YES_OPTION) {
+            serverInstance.banClient(selectedUser);
+        }
+    }//GEN-LAST:event_subButtonUserBanActionPerformed
 
     
     
@@ -456,6 +523,9 @@ public class ServerForm extends javax.swing.JFrame {
     private javax.swing.JMenuItem subButtonShowAccounts;
     private javax.swing.JMenuItem subButtonStart;
     private javax.swing.JMenuItem subButtonStop;
+    private javax.swing.JMenuItem subButtonUserBan;
+    private javax.swing.JMenuItem subButtonUserKick;
+    private javax.swing.JMenuItem subButtonUserMessage;
     private javax.swing.JTabbedPane tabbedPanelStatus;
     private javax.swing.JTextArea textAreaLog;
     // End of variables declaration//GEN-END:variables

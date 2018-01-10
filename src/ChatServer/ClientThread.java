@@ -32,20 +32,16 @@ public class ClientThread extends Thread
         try {        
             while(IsActive) {
                 Message msg = (Message)_in.readObject();
+                Server.log(msg);
                 switch(msg.Type) {
                     case ROOM:
-                        Server.log(msg);
                         Server.forwardRoom(msg);
                         break;
                     case PRIVATE:
-                        Server.log(msg);
                         Server.forwardPrivate(msg);
                         break;
                     case INTERNAL:
                         handleInternal(msg);
-                        break;
-                    case RECEIVED:
-                        Server.log("[Client: " + ClientName + "] Received " + msg.Text[0]);
                         break;
                 }
             }
@@ -64,13 +60,12 @@ public class ClientThread extends Thread
                 Server.changeRoom(msg.Sender, msg.Text[1]);
                 break;
             case "REQUEST_STATUSLIST":
-                
+                Server.sendRoomClientMap(ClientName);
                 break;
         }
     }
     
     public void close(boolean logout) {
-        System.out.println("TEST1");
         try {        
             Message msg = new Message(MessageType.INTERNAL, "server", ClientName, "CLOSE_CONNECTION");
             _out.writeObject(msg);
@@ -78,7 +73,6 @@ public class ClientThread extends Thread
         } catch (ClassNotFoundException | IOException ex) {
             Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         } 
-        System.out.println("TEST2");
         
         closeInternal(logout);
     }
