@@ -202,8 +202,6 @@ public class Server
         String clientSender = msg.Sender;
         msg.Sender = msg.Receiver;
         
-        System.out.println(msg.Sender);
-        
         for(ClientThread client : _roomMap.get(msg.Sender).values()) {
             if(!client.ClientName.equals(clientSender)) {
                 msg.Receiver = client.ClientName;
@@ -234,7 +232,7 @@ public class Server
         _roomMap.remove(roomName);
         _roomMap.put(newName, room);
         
-        Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_RENAMEND", roomName, newName);
+        Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_RENAMED", roomName, newName);
         forwardPublic(msg, null);
                         
         updateForm();
@@ -298,7 +296,7 @@ public class Server
         client.RoomName = newRoom;
         
         // Inform client about successful room change
-        Message msgReply = new Message(MessageType.INTERNAL, "server", clientName, "REPLY_CHANGE_ROOM", "true", newRoom);
+        Message msgReply = new Message(MessageType.INTERNAL, "server", clientName, "REPLY_CHANGE_ROOM", "true", oldRoom,newRoom);
         client.sendMessage(msgReply);
         
         // Inform other clients about room change
