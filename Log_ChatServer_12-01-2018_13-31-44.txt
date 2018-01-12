@@ -1,0 +1,28 @@
+[13-31]  Port changed from 1501 to 1504.
+[13-32]  Created ServerSocket at 0.0.0.0 on port 1504
+[13-32]  Client tries to connect...
+[13-32]  <-- newClient [LOGIN_REQUEST: test]
+[13-32]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[13-32]  Client test succesfully connected.
+[13-32]  <-- test [INTERNAL: REQUEST_STATUSLIST]
+[13-32]  --> test [INTERNAL: REPLY_STATUSLIST]
+[13-32]  Stopping Server...
+[13-32]  --> test [INTERNAL: CLOSE_CONNECTION]
+[13-32]  Server was stopped.
+[13-32]  Port changed from 1504 to 1505.
+[13-32]  Created ServerSocket at 0.0.0.0 on port 1505
+[13-33]  Client tries to connect...
+[13-33]  <-- newClient [LOGIN_REQUEST: test]
+[13-33]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[13-33]  Client test succesfully connected.
+[13-33]  <-- test [INTERNAL: REQUEST_STATUSLIST]
+[13-33]  --> test [INTERNAL: REPLY_STATUSLIST]
+[13-36]  --> test [INTERNAL: ROOM_ADDED]
+[13-36]  Room "asdf" was added.
+[13-36]  <-- test [INTERNAL: REQUEST_CHANGE_ROOM]
+[13-36]  --> test [INTERNAL: REPLY_CHANGE_ROOM]
+[13-36]  Client "test" moved from room "Default" to "asdf".
+[13-36]  <-- test [INTERNAL: CONNECTION_CLOSED]
+[13-36]  Client test disconnected.
+[13-36]  Stopping Server...
+[13-36]  Server was stopped.

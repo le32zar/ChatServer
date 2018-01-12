@@ -1,0 +1,11 @@
+[13-43]  Created ServerSocket at 0.0.0.0 on port 1501
+[13-43]  Client tries to connect...
+[13-43]  <-- newClient [LOGIN_REQUEST: test]
+[13-43]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[13-43]  Client test succesfully connected.
+[13-43]  <-- test [INTERNAL: REQUEST_STATUSLIST]
+[13-43]  --> test [INTERNAL: REPLY_STATUSLIST]
+[13-43]  --> test [INTERNAL: CLOSE_CONNECTION]
+[13-43]  Client test disconnected.
+[13-43]  Stopping Server...
+[13-43]  Server was stopped.

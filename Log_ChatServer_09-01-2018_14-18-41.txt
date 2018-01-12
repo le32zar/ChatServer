@@ -1,0 +1,7 @@
+[14-18]  Created ServerSocket at 0.0.0.0 on port 1501
+[14-19]  Stopping Server...
+[14-19]  Server was stopped.
+[14-19]  Created ServerSocket at 0.0.0.0 on port 1501
+[14-20]  Room "rasdf" was added.
+[14-21]  Stopping Server...
+[14-21]  Server was stopped.

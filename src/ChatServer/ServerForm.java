@@ -148,6 +148,7 @@ public class ServerForm extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setTitle("ChatServer 0.1");
+        setResizable(false);
         setSize(new java.awt.Dimension(950, 600));
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowClosing(java.awt.event.WindowEvent evt) {

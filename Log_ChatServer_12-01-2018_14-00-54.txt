@@ -1,0 +1,12 @@
+[14-00]  Created ServerSocket at 0.0.0.0 on port 1501
+[14-01]  Client tries to connect...
+[14-01]  <-- newClient [LOGIN_REQUEST: hh]
+[14-01]  Client registered new account with given credentials.
+[14-01]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[14-01]  <-- hh [INTERNAL: REQUEST_STATUSLIST]
+[14-01]  Client hh succesfully connected.
+[14-01]  --> hh [INTERNAL: REPLY_STATUSLIST]
+[14-01]  <-- hh [INTERNAL: CONNECTION_CLOSED]
+[14-01]  Client hh disconnected.
+[14-01]  Stopping Server...
+[14-01]  Server was stopped.

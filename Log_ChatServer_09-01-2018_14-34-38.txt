@@ -1,0 +1,5 @@
+[14-34]  Created ServerSocket at 0.0.0.0 on port 1501
+[14-34]  Room "asd" was added.
+[14-35]  Room "asd" was renamed to "".
+[14-36]  Stopping Server...
+[14-36]  Server was stopped.

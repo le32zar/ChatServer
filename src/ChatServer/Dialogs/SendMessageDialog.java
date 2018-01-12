@@ -40,6 +40,7 @@ public class SendMessageDialog extends javax.swing.JDialog {
         textAreaText = new javax.swing.JTextArea();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setResizable(false);
 
         buttonCancel3.setText("Cancel");
         buttonCancel3.addActionListener(new java.awt.event.ActionListener() {
@@ -153,9 +154,6 @@ public class SendMessageDialog extends javax.swing.JDialog {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton buttonCancel;
-    private javax.swing.JButton buttonCancel1;
-    private javax.swing.JButton buttonCancel2;
     private javax.swing.JButton buttonCancel3;
     private javax.swing.JButton buttonSend;
     private javax.swing.JLabel jLabel1;

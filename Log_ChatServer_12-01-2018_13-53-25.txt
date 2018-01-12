@@ -1,0 +1,79 @@
+[13-53]  Created ServerSocket at 0.0.0.0 on port 1501
+[13-53]  Client tries to connect...
+[13-53]  <-- newClient [LOGIN_REQUEST: tu]
+[13-53]  Client registered new account with given credentials.
+[13-53]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[13-53]  Client tu succesfully connected.
+[13-53]  <-- tu [INTERNAL: REQUEST_STATUSLIST]
+[13-53]  --> tu [INTERNAL: REPLY_STATUSLIST]
+[13-54]  Client tries to connect...
+[13-54]  <-- newClient [LOGIN_REQUEST: sasa]
+[13-54]  Client registered new account with given credentials.
+[13-54]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[13-54]  --> tu [INTERNAL: CLIENT_CONNECTED]
+[13-54]  <-- sasa [INTERNAL: REQUEST_STATUSLIST]
+[13-54]  Client sasa succesfully connected.
+[13-54]  --> sasa [INTERNAL: REPLY_STATUSLIST]
+[13-54]  Client tries to connect...
+[13-54]  <-- newClient [LOGIN_REQUEST: hul]
+[13-54]  Client registered new account with given credentials.
+[13-54]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[13-54]  --> tu [INTERNAL: CLIENT_CONNECTED]
+[13-54]  --> sasa [INTERNAL: CLIENT_CONNECTED]
+[13-54]  <-- hul [INTERNAL: REQUEST_STATUSLIST]
+[13-54]  Client hul succesfully connected.
+[13-54]  --> hul [INTERNAL: REPLY_STATUSLIST]
+[13-54]  Client tries to connect...
+[13-54]  <-- newClient [LOGIN_REQUEST: hul]
+[13-54]  --> newClient [LOGIN_REPLY: ALREADY_CONNECTED]
+[13-54]  Client connection attempt refused because user with same name is already connected.
+[13-54]  Client tries to connect...
+[13-54]  <-- newClient [LOGIN_REQUEST: hul]
+[13-54]  --> newClient [LOGIN_REPLY: ALREADY_CONNECTED]
+[13-54]  Client connection attempt refused because user with same name is already connected.
+[13-56]  hul --> Default [ROOM: hallo]
+[13-56]  hul --> tu [ROOM: hallo]
+[13-56]  hul --> sasa [ROOM: hallo]
+[13-56]  sasa --> Default [ROOM: what up]
+[13-56]  sasa --> tu [ROOM: what up]
+[13-56]  sasa --> hul [ROOM: what up]
+[13-56]  <-- tu [INTERNAL: CONNECTION_CLOSED]
+[13-56]  --> sasa [INTERNAL: CLIENT_DISCONNECTED]
+[13-56]  --> hul [INTERNAL: CLIENT_DISCONNECTED]
+[13-56]  Client tu disconnected.
+[13-57]  Client tries to connect...
+[13-57]  <-- newClient [LOGIN_REQUEST: hul]
+[13-57]  --> newClient [LOGIN_REPLY: ALREADY_CONNECTED]
+[13-57]  Client connection attempt refused because user with same name is already connected.
+[13-57]  Client tries to connect...
+[13-57]  <-- newClient [LOGIN_REQUEST: hul]
+[13-57]  --> newClient [LOGIN_REPLY: ALREADY_CONNECTED]
+[13-57]  Client connection attempt refused because user with same name is already connected.
+[13-59]  Client tries to connect...
+[13-59]  <-- newClient [LOGIN_REQUEST: hul]
+[13-59]  --> newClient [LOGIN_REPLY: ALREADY_CONNECTED]
+[13-59]  Client connection attempt refused because user with same name is already connected.
+[13-59]  --> sasa [INTERNAL: ROOM_ADDED]
+[13-59]  --> hul [INTERNAL: ROOM_ADDED]
+[13-59]  Room "gts" was added.
+[13-59]  <-- sasa [INTERNAL: REQUEST_CHANGE_ROOM]
+[13-59]  --> sasa [INTERNAL: REPLY_CHANGE_ROOM]
+[13-59]  --> hul [INTERNAL: CLIENT_ROOM_CHANGED]
+[13-59]  Client "sasa" moved from room "Default" to "gts".
+[14-00]  <-- hul [INTERNAL: REQUEST_CHANGE_ROOM]
+[14-00]  --> hul [INTERNAL: REPLY_CHANGE_ROOM]
+[14-00]  --> sasa [INTERNAL: CLIENT_ROOM_CHANGED]
+[14-00]  Client "hul" moved from room "Default" to "gts".
+[14-00]  --> sasa [INTERNAL: REPLY_CHANGE_ROOM]
+[14-00]  --> hul [INTERNAL: CLIENT_ROOM_CHANGED]
+[14-00]  Client "sasa" moved from room "gts" to "Default".
+[14-00]  --> hul [INTERNAL: REPLY_CHANGE_ROOM]
+[14-00]  --> sasa [INTERNAL: CLIENT_ROOM_CHANGED]
+[14-00]  Client "hul" moved from room "gts" to "Default".
+[14-00]  --> sasa [INTERNAL: ROOM_REMOVED]
+[14-00]  --> hul [INTERNAL: ROOM_REMOVED]
+[14-00]  Room "gts" was removed. All users moved to room "Default".
+[14-00]  Stopping Server...
+[14-00]  --> sasa [INTERNAL: CLOSE_CONNECTION]
+[14-00]  --> hul [INTERNAL: CLOSE_CONNECTION]
+[14-00]  Server was stopped.
