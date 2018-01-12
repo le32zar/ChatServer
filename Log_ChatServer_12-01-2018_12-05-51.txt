@@ -1,0 +1,32 @@
+[12-06]  Created ServerSocket at 0.0.0.0 on port 1501
+[12-06]  Client tries to connect...
+[12-06]  <-- newClient [LOGIN_REQUEST: werner]
+[12-06]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[12-06]  <-- werner [INTERNAL: REQUEST_STATUSLIST]
+[12-06]  Client werner succesfully connected.
+[12-06]  --> werner [INTERNAL: REPLY_STATUSLIST]
+[12-06]  Client tries to connect...
+[12-06]  <-- newClient [LOGIN_REQUEST: peter]
+[12-06]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[12-06]  --> werner [INTERNAL: CLIENT_CONNECTED]
+[12-06]  <-- peter [INTERNAL: REQUEST_STATUSLIST]
+[12-06]  Client peter succesfully connected.
+[12-06]  --> peter [INTERNAL: REPLY_STATUSLIST]
+[12-06]  <-- peter [INTERNAL: CONNECTION_CLOSED]
+[12-06]  --> werner [INTERNAL: CLIENT_DISCONNECTED]
+[12-06]  Client peter disconnected.
+[12-06]  --> werner [INTERNAL: ROOM_ADDED]
+[12-06]  Room "testroom" was added.
+[12-07]  <-- werner [INTERNAL: REQUEST_CHANGE_ROOM]
+[12-07]  --> werner [INTERNAL: REPLY_CHANGE_ROOM]
+[12-07]  Client "werner" moved from room "Default" to "testroom".
+[12-07]  --> werner [INTERNAL: ROOM_RENAMED]
+[12-07]  Room "testroom" was renamed to "test".
+[12-07]  --> werner [INTERNAL: REPLY_CHANGE_ROOM]
+[12-07]  Client "werner" moved from room "test" to "Default".
+[12-07]  --> werner [INTERNAL: ROOM_REMOVED]
+[12-07]  Room "test" was removed. All users moved to room "Default".
+[12-07]  --> werner [PRIVATE: test]
+[12-07]  Client werner disconnected.
+[12-08]  Stopping Server...
+[12-08]  Server was stopped.
