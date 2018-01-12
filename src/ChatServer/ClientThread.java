@@ -71,7 +71,7 @@ public class ClientThread extends Thread
             _out.writeObject(msg);
             _in.readObject();
         } catch (ClassNotFoundException | IOException ex) {
-            Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
+            //Logger.getLogger(ClientThread.class.getName()).log(Level.SEVERE, null, ex);
         } 
         
         closeInternal(logout);

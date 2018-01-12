@@ -1,0 +1,59 @@
+[00-51]  Created ServerSocket at 0.0.0.0 on port 1501
+[00-51]  Client tries to connect...
+[00-51]  <-- newClient [LOGIN_REQUEST: harald]
+[00-51]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-51]  Client harald succesfully connected.
+[00-51]  <-- harald [INTERNAL: REQUEST_STATUSLIST]
+[00-51]  --> harald [INTERNAL: REPLY_STATUSLIST]
+[00-53]  Client tries to connect...
+[00-53]  <-- newClient [LOGIN_REQUEST: werner]
+[00-53]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-53]  --> harald [INTERNAL: CLIENT_CONNECTED]
+[00-53]  <-- werner [INTERNAL: REQUEST_STATUSLIST]
+[00-53]  --> werner [INTERNAL: REPLY_STATUSLIST]
+[00-53]  Client werner succesfully connected.
+[00-53]  Client tries to connect...
+[00-53]  <-- newClient [LOGIN_REQUEST: peter]
+[00-53]  Client registered new account with given credentials.
+[00-53]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[00-53]  --> werner [INTERNAL: CLIENT_CONNECTED]
+[00-53]  <-- peter [INTERNAL: REQUEST_STATUSLIST]
+[00-53]  --> harald [INTERNAL: CLIENT_CONNECTED]
+[00-53]  --> peter [INTERNAL: REPLY_STATUSLIST]
+[00-53]  Client peter succesfully connected.
+[00-53]  --> werner [INTERNAL: ROOM_ADDED]
+[00-53]  --> harald [INTERNAL: ROOM_ADDED]
+[00-53]  --> peter [INTERNAL: ROOM_ADDED]
+[00-53]  Room "test" was added.
+[00-53]  <-- peter [INTERNAL: REQUEST_CHANGE_ROOM]
+[00-53]  --> peter [INTERNAL: REPLY_CHANGE_ROOM]
+[00-53]  --> werner [INTERNAL: CLIENT_ROOM_CHANGED]
+[00-53]  --> harald [INTERNAL: CLIENT_ROOM_CHANGED]
+[00-53]  Client "peter" moved from room "Default" to "test".
+[00-54]  <-- werner [INTERNAL: REQUEST_CHANGE_ROOM]
+[00-54]  --> werner [INTERNAL: REPLY_CHANGE_ROOM]
+[00-54]  --> harald [INTERNAL: CLIENT_ROOM_CHANGED]
+[00-54]  --> peter [INTERNAL: CLIENT_ROOM_CHANGED]
+[00-54]  Client "werner" moved from room "Default" to "test".
+[00-56]  --> werner [INTERNAL: ROOM_RENAMED]
+[00-56]  --> harald [INTERNAL: ROOM_RENAMED]
+[00-56]  --> peter [INTERNAL: ROOM_RENAMED]
+[00-56]  Room "test" was renamed to "testosteron".
+[00-58]  Client tries to connect...
+[00-58]  <-- newClient [LOGIN_REQUEST: peter]
+[00-58]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-58]  --> werner [INTERNAL: CLIENT_CONNECTED]
+[00-58]  <-- peter [INTERNAL: REQUEST_STATUSLIST]
+[00-58]  --> harald [INTERNAL: CLIENT_CONNECTED]
+[00-58]  --> peter [INTERNAL: REPLY_STATUSLIST]
+[00-58]  Client peter succesfully connected.
+[00-58]  Client tries to connect...
+[00-58]  <-- newClient [LOGIN_REQUEST: werner]
+[00-58]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[00-58]  --> harald [INTERNAL: CLIENT_CONNECTED]
+[00-58]  <-- werner [INTERNAL: REQUEST_STATUSLIST]
+[00-58]  --> peter [INTERNAL: CLIENT_CONNECTED]
+[00-58]  Client werner succesfully connected.
+[00-58]  --> werner [INTERNAL: REPLY_STATUSLIST]
+[00-59]  Stopping Server...
+[00-59]  Server was stopped.

@@ -1,0 +1,67 @@
+[01-27]  Created ServerSocket at 0.0.0.0 on port 1501
+[01-27]  Client tries to connect...
+[01-27]  <-- newClient [LOGIN_REQUEST: werner]
+[01-27]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[01-27]  Client werner succesfully connected.
+[01-27]  <-- werner [INTERNAL: REQUEST_STATUSLIST]
+[01-27]  --> werner [INTERNAL: REPLY_STATUSLIST]
+[01-27]  Client tries to connect...
+[01-27]  <-- newClient [LOGIN_REQUEST: peter]
+[01-27]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[01-27]  --> werner [INTERNAL: CLIENT_CONNECTED]
+[01-27]  <-- peter [INTERNAL: REQUEST_STATUSLIST]
+[01-27]  Client peter succesfully connected.
+[01-27]  --> peter [INTERNAL: REPLY_STATUSLIST]
+[01-28]  --> werner [INTERNAL: ROOM_ADDED]
+[01-28]  --> peter [INTERNAL: ROOM_ADDED]
+[01-28]  Room "testr" was added.
+[01-28]  <-- werner [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-28]  --> werner [INTERNAL: REPLY_CHANGE_ROOM]
+[01-28]  --> peter [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-28]  Client "werner" moved from room "Default" to "testr".
+[01-28]  <-- peter [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-28]  --> peter [INTERNAL: REPLY_CHANGE_ROOM]
+[01-28]  --> werner [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-28]  Client "peter" moved from room "Default" to "testr".
+[01-28]  --> werner [INTERNAL: REPLY_CHANGE_ROOM]
+[01-28]  --> peter [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-28]  Client "werner" moved from room "testr" to "Default".
+[01-28]  --> peter [INTERNAL: REPLY_CHANGE_ROOM]
+[01-28]  --> werner [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-28]  Client "peter" moved from room "testr" to "Default".
+[01-28]  --> werner [INTERNAL: ROOM_REMOVED]
+[01-28]  --> peter [INTERNAL: ROOM_REMOVED]
+[01-28]  Room "testr" was removed. All users moved to room "Default".
+[01-28]  --> werner [INTERNAL: ROOM_ADDED]
+[01-28]  --> peter [INTERNAL: ROOM_ADDED]
+[01-28]  Room "test" was added.
+[01-28]  <-- werner [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-28]  --> werner [INTERNAL: REPLY_CHANGE_ROOM]
+[01-28]  --> peter [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-28]  Client "werner" moved from room "Default" to "test".
+[01-28]  <-- peter [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-28]  --> peter [INTERNAL: REPLY_CHANGE_ROOM]
+[01-28]  --> werner [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-28]  Client "peter" moved from room "Default" to "test".
+[01-28]  <-- peter [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-28]  --> peter [INTERNAL: REPLY_CHANGE_ROOM]
+[01-28]  --> werner [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-28]  Client "peter" moved from room "test" to "Default".
+[01-28]  <-- werner [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-28]  --> werner [INTERNAL: REPLY_CHANGE_ROOM]
+[01-28]  --> peter [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-28]  Client "werner" moved from room "test" to "Default".
+[01-29]  --> werner [PRIVATE: nutttöööö]
+[01-29]  --> peter [INTERNAL: CLIENT_DISCONNECTED]
+[01-29]  Client werner disconnected.
+[01-30]  Client peter disconnected.
+[01-32]  Client tries to connect...
+[01-32]  <-- newClient [LOGIN_REQUEST: werner]
+[01-32]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[01-32]  Client werner succesfully connected.
+[01-32]  <-- werner [INTERNAL: REQUEST_STATUSLIST]
+[01-32]  --> werner [INTERNAL: REPLY_STATUSLIST]
+[01-32]  <-- werner [INTERNAL: CONNECTION_CLOSED]
+[01-32]  Client werner disconnected.
+[01-33]  Stopping Server...
+[01-33]  Server was stopped.

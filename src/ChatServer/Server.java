@@ -72,7 +72,6 @@ public class Server
         try {
             for(ClientThread client : _clientMap.values() ) {     
                 client.close(false); 
-                System.out.println("TEST_FOR");
             }
             _clientMap.clear();
             _roomMap.clear();
@@ -199,11 +198,10 @@ public class Server
     Forwards the given Message to all Clients in the Room addressed by Receiver except the Sender.
     **/
     public synchronized void forwardRoom(Message msg) {
-        String clientSender = msg.Sender;
-        msg.Sender = msg.Receiver;
+        String roomName = msg.Receiver;
         
-        for(ClientThread client : _roomMap.get(msg.Sender).values()) {
-            if(!client.ClientName.equals(clientSender)) {
+        for(ClientThread client : _roomMap.get(roomName).values()) {
+            if(!client.ClientName.equals(msg.Sender)) {
                 msg.Receiver = client.ClientName;
                 client.sendMessage(msg);
             }
@@ -221,22 +219,26 @@ public class Server
     
     /**
      * Renames the room roomName to newName. 
-     * @param roomName
-     * @param newName
+     * @param oldRoomName
+     * @param newRoomName
      * @return True, if rename is successful. False if room doesn't exist or if trying to change the Default room.
      */
-    public synchronized boolean renameRoom(String roomName, String newName) {
-        if(roomName.equals("Default") || !_roomMap.containsKey(roomName)) return false;
+    public synchronized boolean renameRoom(String oldRoomName, String newRoomName) {
+        if(oldRoomName.equals("Default") || !_roomMap.containsKey(oldRoomName)) return false;
         
-        Map<String, ClientThread> room = _roomMap.get(roomName);
-        _roomMap.remove(roomName);
-        _roomMap.put(newName, room);
+        Map<String, ClientThread> room = _roomMap.get(oldRoomName);
+        room.values().forEach((client) -> {
+            client.RoomName = newRoomName;
+        });
         
-        Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_RENAMED", roomName, newName);
+        _roomMap.remove(oldRoomName);
+        _roomMap.put(newRoomName, room);
+        
+        Message msg = new Message(MessageType.INTERNAL, "server", null, "ROOM_RENAMED", oldRoomName, newRoomName);
         forwardPublic(msg, null);
                         
         updateForm();
-        log(String.format("Room \"%s\" was renamed to \"%s\".", roomName, newName));
+        log(String.format("Room \"%s\" was renamed to \"%s\".", oldRoomName, newRoomName));
         return true;
     }
     
@@ -266,8 +268,14 @@ public class Server
     public synchronized boolean removeRoom(String roomName) {
         if(roomName.equals("Default") || !_roomMap.containsKey(roomName)) return false;
         
-        Map<String, ClientThread> room = _roomMap.get(roomName);
-        for(String clientName : room.keySet()) {
+        //Create deep copy of String set
+        ArrayList<String> clientsInRoom = new ArrayList<>();
+        for(String t : _roomMap.get(roomName).keySet()) {
+            clientsInRoom.add(t);
+        }
+        //
+        
+        for(String clientName : clientsInRoom) {
             changeRoom(clientName, "Default");
         }
         _roomMap.remove(roomName);

@@ -1,0 +1,31 @@
+[01-08]  Created ServerSocket at 0.0.0.0 on port 1501
+[01-09]  Client tries to connect...
+[01-09]  <-- newClient [LOGIN_REQUEST: werner]
+[01-09]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[01-09]  Client werner succesfully connected.
+[01-09]  <-- werner [INTERNAL: REQUEST_STATUSLIST]
+[01-09]  --> werner [INTERNAL: REPLY_STATUSLIST]
+[01-09]  Client tries to connect...
+[01-09]  <-- newClient [LOGIN_REQUEST: peter]
+[01-09]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[01-09]  --> werner [INTERNAL: CLIENT_CONNECTED]
+[01-09]  <-- peter [INTERNAL: REQUEST_STATUSLIST]
+[01-09]  Client peter succesfully connected.
+[01-09]  --> peter [INTERNAL: REPLY_STATUSLIST]
+[01-09]  --> werner [INTERNAL: ROOM_ADDED]
+[01-09]  --> peter [INTERNAL: ROOM_ADDED]
+[01-09]  Room "test" was added.
+[01-10]  <-- werner [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-10]  --> werner [INTERNAL: REPLY_CHANGE_ROOM]
+[01-10]  --> peter [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-10]  Client "werner" moved from room "Default" to "test".
+[01-10]  <-- peter [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-10]  --> peter [INTERNAL: REPLY_CHANGE_ROOM]
+[01-10]  --> werner [INTERNAL: CLIENT_ROOM_CHANGED]
+[01-10]  Client "peter" moved from room "Default" to "test".
+[01-10]  --> werner [INTERNAL: ROOM_RENAMED]
+[01-10]  --> peter [INTERNAL: ROOM_RENAMED]
+[01-10]  Room "test" was renamed to "testo".
+[01-10]  <-- werner [INTERNAL: REQUEST_CHANGE_ROOM]
+[01-14]  Stopping Server...
+[01-14]  Server was stopped.
