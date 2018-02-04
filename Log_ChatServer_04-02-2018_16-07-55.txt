@@ -1,0 +1,40 @@
+[16-08]  Created ServerSocket at 0.0.0.0 on port 1501
+[16-08]  Client tries to connect...
+[16-08]  <-- newClient [LOGIN_REQUEST: harry]
+[16-08]  Client registered new account with given credentials.
+[16-08]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[16-08]  Client harry succesfully connected.
+[16-08]  <-- harry [INTERNAL: REQUEST_STATUSLIST]
+[16-08]  --> harry [INTERNAL: REPLY_STATUSLIST]
+[16-08]  Client tries to connect...
+[16-08]  <-- newClient [LOGIN_REQUEST: gunther]
+[16-08]  --> newClient [LOGIN_REPLY: ACCEPTED]
+[16-08]  --> harry [INTERNAL: CLIENT_CONNECTED]
+[16-08]  <-- gunther [INTERNAL: REQUEST_STATUSLIST]
+[16-08]  Client gunther succesfully connected.
+[16-08]  --> gunther [INTERNAL: REPLY_STATUSLIST]
+[16-08]  gunther --> harry [INTERNAL: OPEN_PRIVATE]
+[16-08]  Client gunther opened private room with harry
+[16-08]  gunther --> harry [INTERNAL: OPEN_PRIVATE]
+[16-08]  gunther --> harry [PRIVATE: hi jarry]
+[16-08]  gunther --> harry [PRIVATE: hi jarry]
+[16-08]  harry --> gunther [PRIVATE: my name is harry]
+[16-08]  harry --> gunther [PRIVATE: my name is harry]
+[16-08]  gunther --> harry [PRIVATE: fuck yourself]
+[16-08]  gunther --> harry [PRIVATE: fuck yourself]
+[16-09]  harry --> gunther [PRIVATE: buitch]
+[16-09]  harry --> gunther [PRIVATE: buitch]
+[16-09]  gunther --> harry [INTERNAL: CLOSE_PRIVATE]
+[16-09]  Client gunther closed private room with harry
+[16-09]  gunther --> harry [INTERNAL: CLOSE_PRIVATE]
+[16-09]  gunther --> Default [ROOM: achja=]
+[16-09]  gunther --> harry [ROOM: achja=]
+[16-09]  harry --> Default [ROOM: du mongo]
+[16-09]  harry --> gunther [ROOM: du mongo]
+[16-09]  <-- gunther [INTERNAL: CONNECTION_CLOSED]
+[16-09]  --> harry [INTERNAL: CLIENT_DISCONNECTED]
+[16-09]  Client gunther disconnected.
+[16-09]  <-- harry [INTERNAL: CONNECTION_CLOSED]
+[16-09]  Client harry disconnected.
+[16-09]  Stopping Server...
+[16-09]  Server was stopped.

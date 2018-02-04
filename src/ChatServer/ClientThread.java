@@ -60,6 +60,14 @@ public class ClientThread extends Thread
             case "REQUEST_STATUSLIST":
                 Server.sendRoomClientMap(ClientName);
                 break;
+            case "OPEN_PRIVATE":
+                Server.log("Client " + msg.Sender + " opened private room with " + msg.Receiver);
+                Server.forwardPrivate(msg);
+                break;
+            case "CLOSE_PRIVATE":
+                Server.log("Client " + msg.Sender + " closed private room with " + msg.Receiver);
+                Server.forwardPrivate(msg);
+                break;
         }
     }
     

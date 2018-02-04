@@ -15,7 +15,7 @@ public class Server
 
     private ServerForm _form;
     private ServerSocket _socket;
-    private Map<String,ClientThread> _clientMap;
+    private Map<String, ClientThread> _clientMap;
     private Map<String, Map<String,ClientThread>> _roomMap;
 
     public Server(int port, String name, ServerForm form) 

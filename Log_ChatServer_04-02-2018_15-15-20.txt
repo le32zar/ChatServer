@@ -1,0 +1,12 @@
+[15-15]  Created ServerSocket at 0.0.0.0 on port 1501
+[15-15]  Client tries to connect...
+[15-15]  <-- newClient [LOGIN_REQUEST: harray]
+[15-15]  Client registered new account with given credentials.
+[15-15]  --> newClient [LOGIN_REPLY: ACCEPTED_NEW]
+[15-15]  Client harray succesfully connected.
+[15-15]  <-- harray [INTERNAL: REQUEST_STATUSLIST]
+[15-15]  --> harray [INTERNAL: REPLY_STATUSLIST]
+[15-15]  <-- harray [INTERNAL: CONNECTION_CLOSED]
+[15-15]  Client harray disconnected.
+[15-15]  Stopping Server...
+[15-15]  Server was stopped.
